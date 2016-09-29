@@ -4,6 +4,7 @@ import {
   SHOW_CAMERA,
   SET_BARCODE_VALUE,
 } from './actions';
+import { REDUX_BRIDGE_SYNC_INITIAL_STATE } from '../redux-bridge/web';
 
 export default (state = {
   selectedTab: 'incr',
@@ -16,6 +17,8 @@ export default (state = {
   }
 }, action) => {
   switch (action.type) {
+    case REDUX_BRIDGE_SYNC_INITIAL_STATE:
+      return action.state;
     case INCR:
       return { ...state, tabs: {
         ...state.tabs, incr: state.tabs.incr + 1 } };

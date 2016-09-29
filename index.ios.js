@@ -15,8 +15,10 @@ import { createStore, applyMiddleware } from 'redux';
 import uuid from 'uuid';
 import { INCR, SELECT_TAB, IOS_ALERT } from './app/actions';
 import reducer from './app/reducer';
-import RB from './redux-bridge'
-const { webViewSyncMiddleware, ReactBridgedWebView } = RB;
+import {
+  middleware as reduxBridgeMiddleware,
+  ReactBridgedWebView,
+} from './redux-bridge/native';
 
 const alertMiddleware = store => next => action => {
   const { type, title, message } = action;
@@ -31,7 +33,7 @@ const store = createStore(
   reducer,
   applyMiddleware(
     alertMiddleware,
-    webViewSyncMiddleware,
+    reduxBridgeMiddleware,
   ),
 );
 

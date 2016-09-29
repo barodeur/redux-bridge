@@ -5,8 +5,7 @@ import { connect } from 'react-redux';
 import {
   REDUX_BRIDGE_REGISTER_WEB_VIEW,
   REDUX_BRIDGE_UNREGISTER_WEB_VIEW,
-  REDUX_BRIDGE_SYNC_INITIAL_STATE,
-} from './actions';
+} from '../common/actions';
 
 class ReactBridgedWebView extends Component {
   static propTypes = {
@@ -38,8 +37,7 @@ class ReactBridgedWebView extends Component {
         {...rest}
         ref={ref => { this.webView = ref; }}
         onBridgeMessage={message => {
-          const action = JSON.parse(message);
-          dispatchUp({ ...action, webViewId: this.webViewId } );
+          dispatchUp({ ...JSON.parse(message), webViewId: this.webViewId } );
         }}
         onLoad={() => { console.log('LOADED'); }}
         onError={err => { console.log(`ERROR ${err}`); }}

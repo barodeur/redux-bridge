@@ -1,38 +1,16 @@
-import * as actions from './actions';
-import WebViewBridgeManager from './WebViewBridgeManager';
 import uuid from 'uuid';
+import * as actions from '../common/actions';
+import WebViewBridgeManager from './WebViewBridgeManager';
 
 const {
   REDUX_BRIDGE_REGISTER_WEB_VIEW,
   REDUX_BRIDGE_UNREGISTER_WEB_VIEW,
   REDUX_BRIDGE_SYNC_INITIAL_STATE,
-  REDUX_BRIDGE_REQUEST_STATE_SYNC,
+  REDUX_BRIDGE_REQUEST_INITIAL_STATE,
 } = actions;
 
-
 export default store => {
-  const { WebViewBridge } = window || {};
   const storeUUID = uuid.v4();
-
-  if (WebViewBridge) {
-    WebViewBridge.onMessage = message => {
-      console.log(message);
-      store.dispatch(JSON.parse(message));
-    };
-    WebViewBridge.send(JSON.stringify({ type: REDUX_BRIDGE_REQUEST_STATE_SYNC }));
-
-    return next => action => {
-      if (action.storeUUID) {
-        if (action.storeUUID !== storeUUID) {
-          next(action);
-        }
-      } else {
-        action.storeUUID = storeUUID;
-        next(action);
-        WebViewBridge.send(JSON.stringify(action));
-      }
-    }
-  }
 
   const webViewBridgeManager = new WebViewBridgeManager();
 
@@ -47,19 +25,20 @@ export default store => {
         case REDUX_BRIDGE_UNREGISTER_WEB_VIEW:
           webViewBridgeManager.unregister(webViewId);
           return;
-        case REDUX_BRIDGE_REQUEST_STATE_SYNC:
+        case REDUX_BRIDGE_REQUEST_INITIAL_STATE:
           webViewBridgeManager.sendToBridge(webViewId, JSON.stringify({
             type: REDUX_BRIDGE_SYNC_INITIAL_STATE,
             state: store.getState(),
+            storeUUID,
           }));
           return;
       }
     }
+
     if (!action.storeUUID) {
       action.storeUUID = storeUUID;
     }
-    let result = next(action);
     webViewBridgeManager.broadcast(JSON.stringify(action));
-    return result;
+    return next(action);
   };
 };

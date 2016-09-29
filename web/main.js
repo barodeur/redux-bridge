@@ -4,11 +4,11 @@ import ReactDOM from 'react-dom';
 import { connect, Provider } from 'react-redux';
 import uuid from 'uuid';
 import Fastclick from 'fastclick';
-import reduxBridgeReducer from '../redux-bridge/reduxBridgeReducer';
-import webViewSyncMiddleware from '../redux-bridge/webViewSyncMiddleware';
+import {
+  middleware as reduxBridgeMiddleware,
+} from '../redux-bridge/web';
 import { INCR, SHOW_CAMERA, IOS_ALERT } from '../app/actions';
 import reducer from '../app/reducer';
-
 
 class World extends React.Component {
   render() {
@@ -41,12 +41,17 @@ const ConnectedWorld = connect(
   }),
 )(World);
 
+
+
 window.start = () => {
   if (!window.WebViewBridge) {
     return;
   }
 
-  const store = createStore(reduxBridgeReducer(reducer), applyMiddleware(webViewSyncMiddleware));
+  const store = createStore(
+    reducer,
+    applyMiddleware(reduxBridgeMiddleware)
+  );
 
   Fastclick.attach(window.document.body);
 
