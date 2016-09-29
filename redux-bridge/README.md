@@ -36,9 +36,7 @@ import { Provider, connect } from 'react-redux';
 // Redux Bridge imports
 import {
   middleware as reduxBridgeMiddleware,
-  ReactBridgedWebView({
-    webRootUri: 'http://localhost:8080/index.html',
-  }),
+  ReactBridgedWebView,
 } from 'redux-bridge/native';
 
 // Your App imports
@@ -85,7 +83,9 @@ class Container extends Component {
 const store = createStore(
   reducer,
   applyMiddleware(
-    reduxBridgeMiddleware,
+    reduxBridgeMiddleware({
+      webRootUri: 'http://localhost:8080/index.html',
+    }),
   ),
 );
 
