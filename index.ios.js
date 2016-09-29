@@ -6,21 +6,33 @@ import {
   View,
   TouchableHighlight,
   TabBarIOS,
+  AlertIOS
 } from 'react-native';
 import { Provider, connect } from 'react-redux';
 import WebViewBridge from 'react-native-webview-bridge';
 
 import { createStore, applyMiddleware } from 'redux';
 import uuid from 'uuid';
-import { INCR, SELECT_TAB } from './app/actions';
+import { INCR, SELECT_TAB, IOS_ALERT } from './app/actions';
 import reducer from './app/reducer';
 import RB from './redux-bridge'
 const { webViewSyncMiddleware, ReactBridgedWebView } = RB;
-import Cam from './Cam';
+
+const alertMiddleware = store => next => action => {
+  const { type, title, message } = action;
+  console.log(action);
+  if (type === IOS_ALERT) {
+    AlertIOS.alert(title, message);
+  }
+  return next(action);
+}
 
 const store = createStore(
   reducer,
-  applyMiddleware(webViewSyncMiddleware),
+  applyMiddleware(
+    alertMiddleware,
+    webViewSyncMiddleware,
+  ),
 );
 
 const injectScript = ``;
@@ -39,7 +51,6 @@ class App extends Component {
           title="incr"
           systemIcon="history"
           onPress={() => { selectTab('incr'); }}
-          renderAsOriginal
         >
           <View style={styles.container}>
             <TouchableHighlight style={styles.incrContainer} onPress={() => { incr(); }}>
@@ -75,7 +86,7 @@ class App extends Component {
                 />
               </View> :
               <View style={styles.incrContainer}>
-                <Cam />
+                <Text>Camera</Text>
               </View>
             }
           </View>

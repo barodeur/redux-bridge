@@ -6,13 +6,13 @@ import uuid from 'uuid';
 import Fastclick from 'fastclick';
 import reduxBridgeReducer from '../redux-bridge/reduxBridgeReducer';
 import webViewSyncMiddleware from '../redux-bridge/webViewSyncMiddleware';
-import { INCR, SHOW_CAMERA } from '../app/actions';
+import { INCR, SHOW_CAMERA, IOS_ALERT } from '../app/actions';
 import reducer from '../app/reducer';
 
 
 class World extends React.Component {
   render() {
-    const { incrValue, incr, showCamera, barcodeValue } = this.props;
+    const { incrValue, incr, showAlert } = this.props;
     return (
       <div>
         <div>
@@ -20,8 +20,7 @@ class World extends React.Component {
           <button onClick={() => { incr(); }}>INCR</button>
         </div>
         <div>
-          {barcodeValue}
-          <button onClick={() => { showCamera(); }}>SHOW CAMERA</button>
+          <button onClick={() => { showAlert('Alert from react web'); }}>SHOW ALERT</button>
         </div>
       </div>
     )
@@ -38,6 +37,7 @@ const ConnectedWorld = connect(
   dispatch => ({
     incr: () => dispatch({ type: INCR }),
     showCamera: () => dispatch({ type: SHOW_CAMERA }),
+    showAlert: (title, message) => dispatch({ type: IOS_ALERT, title, message }),
   }),
 )(World);
 

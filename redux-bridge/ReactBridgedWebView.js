@@ -44,7 +44,7 @@ class ReactBridgedWebView extends Component {
         onLoad={() => { console.log('LOADED'); }}
         onError={err => { console.log(`ERROR ${err}`); }}
         renderError={err => { console.log(`RENDER ERROR ${err}`); }}
-        source={{uri: 'http://192.168.0.96:8080/web/index.html'}}
+        source={{uri: 'http://localhost:8080/web/index.html'}}
         injectedJavaScript="start();"
       />
     );

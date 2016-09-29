@@ -6,7 +6,7 @@ import {
 } from './actions';
 
 export default (state = {
-  selectedTab: 'camera',
+  selectedTab: 'incr',
   tabs: {
     incr: 0,
     camera: {

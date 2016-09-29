@@ -22,7 +22,6 @@ export default store => {
     WebViewBridge.send(JSON.stringify({ type: REDUX_BRIDGE_REQUEST_STATE_SYNC }));
 
     return next => action => {
-      console.log(action);
       if (action.storeUUID) {
         if (action.storeUUID !== storeUUID) {
           next(action);
@@ -38,7 +37,6 @@ export default store => {
   const webViewBridgeManager = new WebViewBridgeManager();
 
   return next => action =>  {
-    console.log(action);
     if (actions[action.type]) {
       const { webViewId } = action;
       switch(action.type) {
