@@ -11,6 +11,7 @@ export const INCR = 'INCR';
 ```javascript
 // /reducer.js
 import { REDUX_BRIDGE_SYNC_INITIAL_STATE } from 'redux-bridge/common/actions';
+import { INCR } from './actions';
 
 export default (state = 0, action) => {
   switch (action.type) {
@@ -35,7 +36,9 @@ import { Provider, connect } from 'react-redux';
 // Redux Bridge imports
 import {
   middleware as reduxBridgeMiddleware,
-  ReactBridgedWebView,
+  ReactBridgedWebView({
+    webRootUri: 'http://localhost:8080/index.html',
+  }),
 } from 'redux-bridge/native';
 
 // Your App imports
@@ -135,16 +138,16 @@ class Incr extends Component {
   }
 }
 
-// Make it accessible as a standalone component in
+// Make it accessible as a standalone component
 registerWebComponent('Incr', () => Incr);
 
 const store = createStore(
   reducer,
   applyMiddleware(
-    reduxBridgeMiddleware,
+    reduxBridgeMiddleware(),
   )
 )
-registerStore(store);
+registerStore(() => store);
 
 class App extends Component {
   render() {
@@ -155,5 +158,4 @@ class App extends Component {
 }
 
 render(App, document.getElementById('app'));
-
 ```
