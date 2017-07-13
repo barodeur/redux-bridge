@@ -50,8 +50,7 @@ class App extends Component {
       >
         <TabBarIOS.Item
           selected={selectedTab === 'incr'}
-          title="incr"
-          systemIcon="history"
+          title="Incr"
           onPress={() => { selectTab('incr'); }}
         >
           <View style={styles.container}>
@@ -75,8 +74,8 @@ class App extends Component {
         </TabBarIOS.Item>
         <TabBarIOS.Item
           selected={selectedTab === 'scanner'}
-          title="scanner"
-          systemIcon="history"
+          title="Camera"
+          // systemIcon="history"
           onPress={() => { selectTab('scanner'); }}
           renderAsOriginal
         >

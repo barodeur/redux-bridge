@@ -42,7 +42,6 @@ const ConnectedWorld = connect(
 )(World);
 
 
-
 window.start = () => {
   if (!window.WebViewBridge) {
     return;
